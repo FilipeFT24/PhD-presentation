@@ -1,17 +1,22 @@
 \documentclass[9pt,xcolor=dvipsnames,t]{beamer}
 \usetheme{Warsaw}
 \usefonttheme[]{serif}
-\setbeamertemplate{caption}[numbered]
 \setbeamertemplate{footline}[frame number]
 \usepackage{amsmath,amssymb,bm,color,graphicx,mathtools} 
 \usepackage{fancybox}
 \usepackage{fontawesome5}
-\usepackage{subfigure}
 \usepackage{csquotes}
 \usepackage{stmaryrd}
 \setbeamercovered{transparent}
 \usepackage{animate}
 \usepackage{multimedia}
+%figs.
+\usepackage{caption}
+\usepackage[most]{tcolorbox}
+\usepackage{subcaption}
+\usepackage{float}
+\captionsetup[subfigure]{labelformat = parens, labelsep = space, font = small}
+\setbeamertemplate{caption}[numbered]
 %
 \newcommand{\average}[1]{\{\!\!\{#1\}\!\!\}}
 \newcommand{\jump}[1]{\llbracket#1\rrbracket}
@@ -45,6 +50,7 @@
 \usepackage[acronym]{glossaries}
 \glsdisablehyper
 \newacronym{dg}{DG}{Discontinuous Galerkin}
+\newacronym{fv}{FV}{Finite volume}
 \newacronym{2d}{2D}{two-dimensional}
 \newcommand{\transpose}{^{\mathsf{T}}}
 %
@@ -185,102 +191,113 @@ and the nonlinear \textit{pre-balanced} flux is defined as (see \cite{pres_3}):
 \subsection*{High-order Finite Volume (FV) methods}
 \begin{frame}[c]
 \begin{figure}[!htb]
+\begin{minipage}{\linewidth}
     \hspace*{\fill}
-    \subfigure[Linear ($\displaystyle{\mathbb{P}^{1}}$).]
-    {\includegraphics[height=0.30\linewidth]{Figures/DG/Polynomial reconstruction (FV)/PR (1.1).pdf}}
-    \hspace{0.1cm}
-    \subfigure[Quadratic ($\displaystyle{\mathbb{P}^{2}}$).]
-    {\includegraphics[height=0.30\linewidth]{Figures/DG/Polynomial reconstruction (FV)/PR (1.2).pdf}}
-    \hspace{0.1cm}
-    \subfigure[Cubic ($\displaystyle{\mathbb{P}^{3}}$).]
-    {\includegraphics[height=0.30\linewidth]{Figures/DG/Polynomial reconstruction (FV)/PR (1.3).pdf}}
+    \subcaptionbox{Linear ($\displaystyle{\mathbb{P}^{1}}$).}
+    {\includegraphics[width=0.285\linewidth]{Figures/DG/Polynomial reconstruction (FV)/PR (1.1).pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{Quadratic ($\displaystyle{\mathbb{P}^{2}}$).}
+    {\includegraphics[width=0.285\linewidth]{Figures/DG/Polynomial reconstruction (FV)/PR (1.2).pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{Cubic ($\displaystyle{\mathbb{P}^{3}}$).}
+    {\includegraphics[width=0.285\linewidth]{Figures/DG/Polynomial reconstruction (FV)/PR (1.3).pdf}}
     \hspace*{\fill}
     \vspace{-0.5\baselineskip}
     \caption{Polynomial reconstructions about the \textit{face}.}
+\end{minipage}
 \end{figure}
 \end{frame}
 \begin{frame}[c]
 \begin{figure}[!htb]
+\begin{minipage}{\linewidth}
     \hspace*{\fill}
-    \subfigure[$\displaystyle{\mathbb{P}^{1}}$: $\displaystyle{3}$ \textit{monomials}.]
-    {\includegraphics[height=0.300\linewidth]{Figures/DG/Discretisation stencil (FV)/DS (1.1).pdf}}
-    \hspace{0.1cm}
-    \subfigure[$\displaystyle{\mathbb{P}^{2}}$: $\displaystyle{6}$ \textit{monomials}.]
-    {\includegraphics[height=0.300\linewidth]{Figures/DG/Discretisation stencil (FV)/DS (1.2).pdf}}
-    \hspace{0.1cm}
-    \subfigure[$\displaystyle{\mathbb{P}^{n}}$: $\displaystyle{\binom{n+2}{n}}$ \textit{monomials}.]
-    {\includegraphics[height=0.300\linewidth]{Figures/DG/Discretisation stencil (FV)/DS (1.3).pdf}}
+    \subcaptionbox{$\displaystyle{\mathbb{P}^{1}}$: $\displaystyle{3}$ \textit{monomials}.}
+    {\includegraphics[width=0.285\linewidth]{Figures/DG/Discretisation stencil (FV)/DS (1.1).pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{$\displaystyle{\mathbb{P}^{2}}$: $\displaystyle{6}$ \textit{monomials}.}
+    {\includegraphics[width=0.285\linewidth]{Figures/DG/Discretisation stencil (FV)/DS (1.2).pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{$\displaystyle{\mathbb{P}^{n}}$: $\displaystyle{\binom{n+2}{n}}$ \textit{monomials}.}
+    {\includegraphics[width=0.285\linewidth]{Figures/DG/Discretisation stencil (FV)/DS (1.3).pdf}}
     \hspace*{\fill}
     \vspace{-0.5\baselineskip}
-    \caption{Discretisation stencils for a \textit{least-squares} reconstruction on a cartesian mesh.}
+    \caption{Polynomial reconstructions about the \textit{face}.}
+\end{minipage}
 \end{figure}
 \end{frame}
 %
 \subsection*{High-order Discontinuous Galerkin (DG) methods}
 \begin{frame}[c]
 \begin{figure}[!htb]
+\begin{minipage}{\linewidth}
     \hspace*{\fill}
-    \subfigure[Finite volume.]
-    {\includegraphics[height=0.450\linewidth]{Figures/DG/Discretisation stencil (FV)/DS (2.1).pdf}}
-    \hspace{0.1cm}
-    \subfigure[\gls{dg}.]
-    {\includegraphics[height=0.450\linewidth]{Figures/DG/Discretisation stencil (FV)/DS (2.2).pdf}}
+    \subcaptionbox{\gls{fv}.}
+    {\includegraphics[width=0.450\linewidth]{Figures/DG/Discretisation stencil (FV)/DS (2.1).pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{\gls{dg}.}
+    {\includegraphics[width=0.450\linewidth]{Figures/DG/Discretisation stencil (FV)/DS (2.2).pdf}}
     \hspace*{\fill}
     \vspace{-0.5\baselineskip}
     \caption{Discretisation stencils for \textit{arbitrarily} higher-order reconstructions about the \textit{face} in red.}
+\end{minipage}
 \end{figure}
 \end{frame}
 \begin{frame}[c]
 \begin{figure}[!htb]
-    {\includegraphics[height=0.195\linewidth]{Figures/DG/Cell/CELL_PAMPA_VERT_LOCAL.pdf}}
-    \vspace{-0.5\baselineskip}
+    {\includegraphics[width=0.215\linewidth]{Figures/DG/Cell/CELL_PAMPA_VERT_LOCAL.pdf}}
     \caption{\textit{Local} partitions.}
 \end{figure}
 \vspace{-0.5\baselineskip}
 \begin{figure}[!htb]
+\begin{minipage}{\linewidth}
     \hspace*{\fill}
-    \subfigure[Partition $\displaystyle{1}$.]
-    {\includegraphics[height=0.195\linewidth]{Figures/DG/Face/FACE_PAMPA_VERT_LOCAL_AND_NOT_FRONTIER_0.pdf}}
-    \hspace{0.1cm}
-    \subfigure[Partition $\displaystyle{2}$.]
-    {\includegraphics[height=0.195\linewidth]{Figures/DG/Face/FACE_PAMPA_VERT_LOCAL_AND_NOT_FRONTIER_1.pdf}}
-    \hspace{0.1cm}
-    \subfigure[Partition $\displaystyle{3}$.]
-    {\includegraphics[height=0.195\linewidth]{Figures/DG/Face/FACE_PAMPA_VERT_LOCAL_AND_NOT_FRONTIER_2.pdf}}
+    \subcaptionbox{Partition $\displaystyle{1}$.}
+    {\includegraphics[width=0.215\linewidth]{Figures/DG/Face/FACE_PAMPA_VERT_LOCAL_AND_NOT_FRONTIER_0.pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{Partition $\displaystyle{2}$.}
+    {\includegraphics[width=0.215\linewidth]{Figures/DG/Face/FACE_PAMPA_VERT_LOCAL_AND_NOT_FRONTIER_1.pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{Partition $\displaystyle{3}$.}
+    {\includegraphics[width=0.215\linewidth]{Figures/DG/Face/FACE_PAMPA_VERT_LOCAL_AND_NOT_FRONTIER_2.pdf}}
     \hspace*{\fill}
     \vspace{-0.5\baselineskip}
     \caption{\textit{Local and non-frontier} partitions.}
+\end{minipage}
 \end{figure}
 \end{frame}
 \begin{frame}[c]
 \begin{figure}[!htb]
+\begin{minipage}{\linewidth}
     \hspace*{\fill}
-    \subfigure[Partition $\displaystyle{1}$.]
-    {\includegraphics[height=0.195\linewidth]{Figures/DG/Cell/CELL_PAMPA_VERT_OVERLAP_0.pdf}}
-    \hspace{0.1cm}
-    \subfigure[Partition $\displaystyle{2}$.]
-    {\includegraphics[height=0.195\linewidth]{Figures/DG/Cell/CELL_PAMPA_VERT_OVERLAP_1.pdf}}
-    \hspace{0.1cm}
-    \subfigure[Partition $\displaystyle{3}$.]
-    {\includegraphics[height=0.195\linewidth]{Figures/DG/Cell/CELL_PAMPA_VERT_OVERLAP_2.pdf}}
+    \subcaptionbox{Partition $\displaystyle{1}$.}
+    {\includegraphics[width=0.215\linewidth]{Figures/DG/Cell/CELL_PAMPA_VERT_OVERLAP_0.pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{Partition $\displaystyle{2}$.}
+    {\includegraphics[width=0.215\linewidth]{Figures/DG/Cell/CELL_PAMPA_VERT_OVERLAP_1.pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{Partition $\displaystyle{3}$.}
+    {\includegraphics[width=0.215\linewidth]{Figures/DG/Cell/CELL_PAMPA_VERT_OVERLAP_2.pdf}}
     \hspace*{\fill}
     \vspace{-0.5\baselineskip}
     \caption{\textit{Overlapping} partitions.}
+\end{minipage}
 \end{figure}
 \vspace{-0.5\baselineskip}
 \begin{figure}[!htb]
+\begin{minipage}{\linewidth}
     \hspace*{\fill}
-    \subfigure[Partition $\displaystyle{1}$.]
-    {\includegraphics[height=0.195\linewidth]{Figures/DG/Face/FACE_PAMPA_VERT_FRONTIER_0.pdf}}
-    \hspace{0.1cm}
-    \subfigure[Partition $\displaystyle{2}$.]
-    {\includegraphics[height=0.195\linewidth]{Figures/DG/Face/FACE_PAMPA_VERT_FRONTIER_1.pdf}}
-    \hspace{0.1cm}
-    \subfigure[Partition $\displaystyle{3}$.]
-    {\includegraphics[height=0.195\linewidth]{Figures/DG/Face/FACE_PAMPA_VERT_FRONTIER_2.pdf}}
+    \subcaptionbox{Partition $\displaystyle{1}$.}
+    {\includegraphics[width=0.215\linewidth]{Figures/DG/Face/FACE_PAMPA_VERT_FRONTIER_0.pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{Partition $\displaystyle{2}$.}
+    {\includegraphics[width=0.215\linewidth]{Figures/DG/Face/FACE_PAMPA_VERT_FRONTIER_1.pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{Partition $\displaystyle{3}$.}
+    {\includegraphics[width=0.215\linewidth]{Figures/DG/Face/FACE_PAMPA_VERT_FRONTIER_2.pdf}}
     \hspace*{\fill}
     \vspace{-0.5\baselineskip}
     \caption{\textit{Frontier} partitions.}
+\end{minipage}
 \end{figure}
 \end{frame}
 %
@@ -396,161 +413,208 @@ where, for any $\displaystyle{w_{h}\in\mathbb{P}^{k}(\altmathcal{T}_{h})}$,
 \end{equation}
 \end{frame}
 %
-% V&V
-\section{Verification and Validation (V\&V)}
+% Numerical Validation
+\section{Numerical Validation}
 % #1
-\subsection*{Test 1: Nonlinear shallow water equations}
-\begin{frame}
-\begin{figure}[!htb]
-    \hspace*{\fill}
-    \subfigure[Free-surface elevation ($\displaystyle{\eta}$).]
-    {\includegraphics[height=0.435\linewidth]{Figures/T1/SW_P1 (z, 0.01s).pdf}}
-    \subfigure[Momentum ($\displaystyle{q = hu}$).]
-    {\includegraphics[height=0.435\linewidth]{Figures/T1/SW_P1 (q, 0.01s).pdf}}
-    \hspace*{\fill}
-    \vspace{-0.5\baselineskip}
-    \caption{Free-surface elevation ($\displaystyle{\eta}$) and momentum ($\displaystyle{q}$) distribution at $\displaystyle{t^{\prime} = 0.01s}$.}
-\end{figure}
-\end{frame}
-\begin{frame}
-\begin{figure}[!htb]
-    \hspace*{\fill}
-    \subfigure[Free-surface elevation ($\displaystyle{\eta}$).]
-    {\includegraphics[height=0.435\linewidth]{Figures/T1/SW (z, 0.01s).pdf}}
-    \subfigure[Momentum ($\displaystyle{q = hu}$).]
-    {\includegraphics[height=0.435\linewidth]{Figures/T1/SW (q, 0.01s).pdf}}
-    \hspace*{\fill}
-    \vspace{-0.5\baselineskip}
-    \caption{Discretisation error norm ($\displaystyle{\ell_{2}}$-norm) decay for increasingly refined uniform grids.}
-\end{figure}
-\end{frame}
-% #2
-\subsection*{Test 2: Solitary wave propagation}
-% #3
-\subsection*{Test 3: Head-on collision and symmetry boundary conditions}
+\subsection*{Test 1: Head-on collision and symmetry boundary conditions}
 \begin{frame}[c]
-\begin{figure}
-\begin{minipage}{0.45\linewidth}
-    \animategraphics[width=\linewidth,autoplay,loop]{30}{Figures/T3/Hoc/21/}{1}{150}
+\begin{figure}[!htb]
+\begin{minipage}{\linewidth}
+    \hspace*{\fill}
+    \subcaptionbox{Head-on collision.}{
+    \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T1/Hoc/21/}{1}{150}}
+    \hspace*{\fill}
+    \subcaptionbox{Wall.}{
+    \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T1/Wall/21/}{1}{150}}
+    \hspace*{\fill}
     \vspace{-0.5\baselineskip}
-    \caption{Head-on collision ($\displaystyle{\epsilon=0.21}$).}
-\end{minipage}
-\hfill
-\begin{minipage}{0.45\linewidth}
-    \animategraphics[width=\linewidth,autoplay,loop]{30}{Figures/T3/Wall/21/}{1}{150}
-    \vspace{-0.5\baselineskip}
-    \caption{Wall ($\displaystyle{\epsilon=0.21}$).}
-\end{minipage}
-\end{figure}
-\end{frame}
-
-
-
-
-
-
-
-\begin{frame}[c]
-\begin{figure}
-\begin{minipage}{0.45\linewidth}
-    \animategraphics[width=\linewidth,autoplay,loop]{30}{Figures/T3/Hoc/96/}{1}{150}
-    \vspace{-0.5\baselineskip}
-    \caption{Head-on collision ($\displaystyle{\epsilon=0.96}$).}
-\end{minipage}
-\hfill
-\begin{minipage}{0.45\linewidth}
-    \animategraphics[width=\linewidth,autoplay,loop]{30}{Figures/T3/Wall/96/}{1}{150}
-    \vspace{-0.5\baselineskip}
-    \caption{Wall ($\displaystyle{\epsilon=0.96}$).}
+    \caption{Free-surface elevation ($\displaystyle{\zeta^{\prime}}$) distribution for the wave of $\displaystyle{\epsilon = 0.21}$.}
 \end{minipage}
 \end{figure}
 \end{frame}
 \begin{frame}[c]
 \begin{figure}[!htb]
+\begin{minipage}{\linewidth}
     \hspace*{\fill}
-    \subfigure[$\displaystyle{\epsilon = 0.21}$.]
-    {\includegraphics[height=0.45\linewidth]{Figures/T3/HocWall1_P3 (0.21).pdf}}
-    \subfigure[$\displaystyle{\epsilon = 0.96}$.]
-    {\includegraphics[height=0.45\linewidth]{Figures/T3/HocWall1_P3 (0.96).pdf}}
+    \subcaptionbox{Head-on collision.}{
+    \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T1/Hoc/96/}{1}{150}}
+    \hspace*{\fill}
+    \subcaptionbox{Wall.}{
+    \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T1/Wall/96/}{1}{150}}
+    \hspace*{\fill}
+    \vspace{-0.5\baselineskip}
+    \caption{Free-surface elevation ($\displaystyle{\zeta^{\prime}}$) distribution for the wave of $\displaystyle{\epsilon = 0.96}$.}
+\end{minipage}
+\end{figure}
+\end{frame}
+\begin{frame}[c]
+\begin{figure}[!htb]
+\begin{minipage}{\linewidth}
+    \hspace*{\fill}
+    \subcaptionbox{Head-on collision.}{\includegraphics[width=0.475\linewidth]{Figures/T1/HocWall1_P3 (0.21).pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{Wall.}{\includegraphics[width=0.475\linewidth]{Figures/T1/HocWall1_P3 (0.96).pdf}}
     \hspace*{\fill}
     \vspace{-0.5\baselineskip}
     \caption{Free-surface elevation ($\displaystyle{\zeta^{\prime}}$) distribution at $\displaystyle{t^{\prime} = t_{0, p, f}^{\prime}}$ for waves of $\displaystyle{\epsilon = 0.21}$ and $\displaystyle{0.96}$.}
+\end{minipage}
+\end{figure}
+\end{frame}
+% #2
+\subsection*{Test 2: Overtaking collision}
+\begin{frame}[c]
+\begin{figure}[!htb]
+\begin{minipage}{\linewidth}
+    \hspace*{\fill}
+    \subcaptionbox{Time frames.}{\includegraphics[width=0.475\linewidth]{Figures/T2/Oc_P3.pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{Time evolution.}{\animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T2/frames/}{1}{150}}
+    \hspace*{\fill}
+    \vspace{-0.5\baselineskip}
+    \caption{Overtaking collision of a wave of $\displaystyle{\epsilon = 0.44}$ by one of $\displaystyle{\epsilon = 0.96}$.}
+\end{minipage}
+\end{figure}
+\end{frame}
+% #3
+\subsection*{Test 3: Dispersive dam-break}
+\begin{frame}[c]
+\begin{figure}[!htb]
+\begin{minipage}{\linewidth}
+    \hspace*{\fill}
+    \subcaptionbox{Water depth ($\displaystyle{h}$).}{
+    \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T3/frames/h/}{1}{150}}
+    \hspace*{\fill}
+    \subcaptionbox{Velocity ($\displaystyle{u}$).}{
+    \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T3/frames/u/}{1}{150}}
+    \hspace*{\fill}
+    \vspace{-0.5\baselineskip}
+    \caption{Water depth ($\displaystyle{h}$) and velocity ($\displaystyle{u}$) evolution.}
+\end{minipage}
+\end{figure}
+\end{frame}
+\begin{frame}[c]
+\begin{figure}[!htb]
+\begin{minipage}{\linewidth}
+    \hspace*{\fill}
+    \subcaptionbox{Water depth ($\displaystyle{h}$).}{\includegraphics[width=0.475\linewidth]{Figures/T3/Ddb_h.pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{Velocity ($\displaystyle{u}$).}{\includegraphics[width=0.475\linewidth]{Figures/T3/Ddb_u.pdf}}
+    \hspace*{\fill}
+    \vspace{-0.5\baselineskip}
+    \caption{Water depth ($\displaystyle{h}$) and velocity ($\displaystyle{u}$) distribution at $\displaystyle{t = 47.434s}$ for $\displaystyle{\mathbb{P}^{1}}$, $\displaystyle{\mathbb{P}^{2}}$ and $\displaystyle{\mathbb{P}^{3}}$.}
+\end{minipage}
 \end{figure}
 \end{frame}
 % #4
-\subsection*{Test 4: Overtaking collision}
-\begin{frame}
+\subsection*{Test 4: Grilli \textit{et al.}}
+\begin{frame}[c]
+\begin{figure}[!htb]
+\begin{minipage}{\linewidth}
+    \hspace*{\fill}
+    \subcaptionbox{$\displaystyle{y-\text{axis}:z^{\prime}}$.}{
+    \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T4/frames/fig1/}{1}{150}}
+    \hspace*{\fill}
+    \subcaptionbox{$\displaystyle{y-\text{axis}:\zeta^{\prime}}$.}{
+    \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T4/frames/fig2/}{1}{150}}
+    \hspace*{\fill}
+    \vspace{-0.5\baselineskip}
+    \caption{Shoaling of a wave of $\displaystyle{\epsilon = 0.20}$ on a $\displaystyle{1:35}$ slope.}
+\end{minipage}
+\end{figure}
+\end{frame}
+\begin{frame}[c]
+\begin{figure}[!htb]
+\begin{minipage}{\linewidth}
+    \hspace*{\fill}
+    \subcaptionbox{Incident waves at gauge $\displaystyle{g_{0}}$.}{\includegraphics[width=0.475\linewidth]{Figures/T4/Grilli0 (gn).pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{Shoaling waves at gauges $\displaystyle{g_{1}-g_{9}}$.}{\includegraphics[width=0.475\linewidth]{Figures/T4/Grillik (gn).pdf}}
+    \hspace*{\fill}
+    \vspace{-0.5\baselineskip}
+    \caption{Comparison between experiments ($\displaystyle{\circ}$) and computations (\rule[0.5ex]{1em}{0.5pt}): $\displaystyle{\alpha=1}$.}
+\end{minipage}
+\end{figure}
+\end{frame}
+\begin{frame}[c]
+\begin{figure}[!htb]
+\begin{minipage}{\linewidth}
+    \hspace*{\fill}
+    \subcaptionbox{Incident waves at gauge $\displaystyle{g_{0}}$.}{\includegraphics[width=0.475\linewidth]{Figures/T4/Grilli0 (e-gn).pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{Shoaling waves at gauges $\displaystyle{g_{1}-g_{9}}$.}{\includegraphics[width=0.475\linewidth]{Figures/T4/Grillik (e-gn).pdf}}
+    \hspace*{\fill}
+    \vspace{-0.5\baselineskip}
+    \caption{Comparison between experiments ($\displaystyle{\circ}$) and computations (\rule[0.5ex]{1em}{0.5pt}): $\displaystyle{\alpha=1.159}$.}
+\end{minipage}
+\end{figure}
 \end{frame}
 % #5
-\subsection*{Test 5: Dispersive dam-break}
-\begin{frame}[c]
-\begin{figure}
-\begin{minipage}{0.45\linewidth}
-    \animategraphics[width=\linewidth,autoplay,loop]{30}{Figures/T5/frames/h/}{1}{150}
-    \vspace{-0.5\baselineskip}
-    \caption{X.}
-\end{minipage}
-\hfill
-\begin{minipage}{0.45\linewidth}
-    \animategraphics[width=\linewidth,autoplay,loop]{30}{Figures/T5/frames/u/}{1}{150}
-    \vspace{-0.5\baselineskip}
-    \caption{X.}
-\end{minipage}
-\end{figure}
-\end{frame}
-\begin{frame}
-\begin{figure}[!htb]
-    \hspace*{\fill}
-    \subfigure[Water depth ($\displaystyle{h}$).]
-    {\includegraphics[height=0.45\linewidth]{Figures/T5/Ddb_h.pdf}}
-    \subfigure[Velocity ($\displaystyle{u}$).]
-    {\includegraphics[height=0.45\linewidth]{Figures/T5/Ddb_u.pdf}}
-    \hspace*{\fill}
-    \vspace{-0.5\baselineskip}
-    \caption{Water depth ($\displaystyle{h}$) and velocity ($\displaystyle{u}$) distribution at $\displaystyle{t = 47.434s}$.}
-\end{figure}
-\end{frame}
-% #6
-\subsection*{Test 6: Grilli \textit{et al.}}
-\begin{frame}
-\begin{figure}[!htb]
-    \hspace*{\fill}
-    \subfigure[Incident waves at gauge $\displaystyle{g_{0}}$.]
-    {\includegraphics[height=0.45\linewidth]{Figures/T6/Grilli0 (C3, gn).pdf}}
-    \subfigure[Shoaling waves at gauges $\displaystyle{g_{1}-g_{9}}$.]
-    {\includegraphics[height=0.45\linewidth]{Figures/T6/Grillik (C3, gn).pdf}}
-    \hspace*{\fill}
-    \vspace{-0.5\baselineskip}
-    \caption{Comparison between experiments ($\displaystyle{\circ}$) and computations (\rule[0.5ex]{1em}{0.5pt}).}
-\end{figure}
-\end{frame}
-% #7
-\subsection*{Test 7: Reflection of shoaling waves (M. Walkley)}
+\subsection*{Test 5: Reflection of shoaling waves (M. Walkley)}
 \begin{frame}[c]
 \begin{figure}[!htb]
+\begin{minipage}{\linewidth}
     \hspace*{\fill}
-    \subfigure[$\displaystyle{t = 0s}$.]
-    {\includegraphics[height=0.45\linewidth]{Figures/T7/Ref2 (t0).pdf}}
-    \subfigure[$\displaystyle{t = 30s}$.]
-    {\includegraphics[height=0.45\linewidth]{Figures/T7/Ref2 (tf).pdf}}
+    \subcaptionbox{$\displaystyle{t = 0s}$.}{\includegraphics[width=0.475\linewidth]{Figures/T5/Ref2 (t0).pdf}}
+    \hspace*{\fill}
+    \subcaptionbox{$\displaystyle{t = 30s}$.}{\includegraphics[width=0.475\linewidth]{Figures/T5/Ref2 (tf).pdf}}
     \hspace*{\fill}
     \vspace{-0.5\baselineskip}
     \caption{Experimental setup for waves of $\displaystyle{\epsilon = 0.07}$ (\textcolor{red}{\rule[0.5ex]{1em}{0.5pt}}) and $\displaystyle{0.12}$ (\textcolor{blue}{\rule[0.5ex]{1em}{0.5pt}}).}
+\end{minipage}
 \end{figure}
 \end{frame}
-\begin{figure}
-\begin{minipage}{0.45\linewidth}
-    \animategraphics[width=\linewidth,autoplay,loop]{30}{Figures/T7/frames/fig1/}{1}{150}
+\begin{frame}[c]
+\begin{figure}[!htb]
+\begin{minipage}{\linewidth}
+    \hspace*{\fill}
+    \subcaptionbox{$\displaystyle{y-\text{axis}:z^{\prime}}$.}{
+    \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T5/frames/fig1/}{1}{150}}
+    \hspace*{\fill}
+    \subcaptionbox{$\displaystyle{y-\text{axis}:\zeta^{\prime}}$.}{
+    \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T5/frames/fig2/}{1}{150}}
+    \hspace*{\fill}
     \vspace{-0.5\baselineskip}
-    \caption{Head-on collision ($\displaystyle{\epsilon=0.96}$).}
-\end{minipage}
-\hfill
-\begin{minipage}{0.45\linewidth}
-    \animategraphics[width=\linewidth,autoplay,loop]{30}{Figures/T7/frames/fig2/}{1}{150}
-    \vspace{-0.5\baselineskip}
-    \caption{Wall ($\displaystyle{\epsilon=0.96}$).}
+    \caption{Shoaling and reflection of waves of $\displaystyle{\epsilon = 0.07}$ and $\displaystyle{0.12}$ on a $\displaystyle{1:50}$ slope.}
 \end{minipage}
 \end{figure}
+\end{frame}
+
+
+
+\begin{frame}[c]
+\begin{figure}[!htb]
+\begin{minipage}{\linewidth}
+    \hspace*{\fill}
+    \subcaptionbox{Gauge $\displaystyle{g_{0}}$.}{\includegraphics[width=0.475\linewidth]{}}
+    \hspace*{\fill}
+    \subcaptionbox{Gauge $\displaystyle{g_{1}}$.}{\includegraphics[width=0.475\linewidth]{}}
+    \hspace*{\fill}
+    \subcaptionbox{Gauge $\displaystyle{g_{2}}$.}{\includegraphics[width=0.475\linewidth]{}}
+    \hspace*{\fill}
+    \vspace{-0.5\baselineskip}
+    \caption{Comparison between experiments ($\displaystyle{\circ}$) and computations (\rule[0.5ex]{1em}{0.5pt}): $\displaystyle{\alpha=1}$ for the wave of $\displaystyle{\epsilon = 0.07}$.}
+\end{minipage}
+\end{figure}
+\end{frame}
+\begin{frame}[c]
+\begin{figure}[!htb]
+\begin{minipage}{\linewidth}
+    \hspace*{\fill}
+    \subcaptionbox{Gauge $\displaystyle{g_{0}}$.}{\includegraphics[width=0.475\linewidth]{}}
+    \hspace*{\fill}
+    \subcaptionbox{Gauge $\displaystyle{g_{1}}$.}{\includegraphics[width=0.475\linewidth]{}}
+    \hspace*{\fill}
+    \subcaptionbox{Gauge $\displaystyle{g_{2}}$.}{\includegraphics[width=0.475\linewidth]{}}
+    \hspace*{\fill}
+    \vspace{-0.5\baselineskip}
+    \caption{Comparison between experiments ($\displaystyle{\circ}$) and computations (\rule[0.5ex]{1em}{0.5pt}): $\displaystyle{\alpha=1}$ for the wave of $\displaystyle{\epsilon = 0.12}$.}
+\end{minipage}
+\end{figure}
+\end{frame}
+
+
+
+
 % Appendix
 \section{Appendix}
 \begin{frame}
