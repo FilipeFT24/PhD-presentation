@@ -50,6 +50,7 @@
 \usepackage[acronym]{glossaries}
 \glsdisablehyper
 \newacronym{dg}{DG}{Discontinuous Galerkin}
+\newacronym{fe}{FE}{Finite Element}
 \newacronym{fv}{FV}{Finite volume}
 \newacronym{2d}{2D}{two-dimensional}
 \newcommand{\transpose}{^{\mathsf{T}}}
@@ -104,12 +105,15 @@
 \begin{enumerate}[label=\protect\statuslabel{\arabic*}{\nref},ref=\arabic*]}{\label{myenum@\arabic{myenum}}
 \end{enumerate}}
 \makeatother
+%
+\setlist[itemize,1]{label=$\diamond$}
+\setlist[itemize,2]{label=$\ast$}
 %--------------------------------------------------------------
 %--------------------------------------------------------------
 %--------------------------------------------------------------
 % Title page
-\title[R\'{e}union DRP/R3C]{R\'{e}union d'unit\'{e} (DRP/R3C)}
-\author{Filipe Forte Tenreiro \texorpdfstring{\\}{} [0.50em] \footnotesize{\textit{Sous la supervision} de M. Kazolea\texorpdfstring{\textsuperscript{a}}{} et A. G. Filippini\texorpdfstring{\textsuperscript{b}}{}} \texorpdfstring{\\}{} [0.25em] \texorpdfstring{\textsuperscript{a}}{}\tiny{INRIA Center of the University of Bordeaux - CARDAMOM team - 200 av. de la Vieille Tour, 33405 Talence, France} \texorpdfstring{\\}{} [0.25em] \texorpdfstring{\textsuperscript{b}}{}\tiny{BRGM, French Geological Survey - Coastal Risks and Climate Change team (DRP/R3C) - 3 av. Guillemin, 45100 Orl{\'{e}}ans, France}}
+\title[R\'{e}union R3C]{R\'{e}union d'unit\'{e} (R3C)}
+\author{Filipe Forte Tenreiro \texorpdfstring{\\}{} [0.50em] \footnotesize{\textit{Sous la supervision} de M. Kazolea\texorpdfstring{\textsuperscript{a}}{} et A. G. Filippini\texorpdfstring{\textsuperscript{b}}{}} \texorpdfstring{\\}{} [0.25em] \texorpdfstring{\textsuperscript{a}}{}\tiny{INRIA Center of the University of Bordeaux - CARDAMOM team - 200 av. de la Vieille Tour, 33405 Talence, France} \texorpdfstring{\\}{} [0.25em] \texorpdfstring{\textsuperscript{b}}{}\tiny{BRGM, French Geological Survey - Coastal Risks and Climate Change team (R3C) - 3 av. Guillemin, 45100 Orl{\'{e}}ans, France}}
 \institute[EDMI, Universit\'{e} de Bordeaux]{
 \footnotesize{\'{E}cole Doctorale de Math\'{e}matiques et Informatique (EDMI) \\ Universit\'{e} de Bordeaux}}
 \date[Nov 20, 2025]{\footnotesize{Novembre 20, 2025}}
@@ -124,17 +128,50 @@
 \section{Introduction}
 %
 \subsection*{Motivation}
-\begin{frame}
+\begin{frame}[c]
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.75\linewidth]{Figures/Motivation/Motivation (1).pdf}
+\caption{Typical zones used to describe coastal wave propagation.}
+\end{figure}
+\begin{itemize}
+    \item\textit{Far} from the shore: $\displaystyle{\epsilon\ll 1}$ (\textit{small} amplitude assumption).
+    \pause
+    \item\textit{Near}-shore phenomena: shoaling, breaking, run-up/down.
+    \begin{itemize}
+        \item Euler equations.
+        \item Nonlinear shallow water equations (\textit{long} wave assumption: $\displaystyle{\mu\ll 1}$).
+        \item Use the \textit{Green-Nagdhi} model to account for \textcolor{red}{dispersive effects} ($\displaystyle{\altmathcal{O}(\mu)}$).
+    \end{itemize}
+\end{itemize}
 \end{frame}
 %
-\subsection*{Shallow water asymptotics}
-\begin{frame}
-\begin{equation}
-\begin{aligned}
-\text{Shallow water regime: } & \mu\coloneq\frac{h_{0}^{2}}{\lambda^{2}}\ll 1 \\
-\text{Large amplitude regime: } & \epsilon\coloneqq\frac{a}{h_{0}}=\altmathcal{O}(1)
-\end{aligned}
-\end{equation}
+\subsection*{Progress}
+\begin{frame}[c]
+\begin{myenum}
+    \item\textit{AeroSol}:
+    \begin{itemize}
+        \item Optimised the \textit{assembly} and \textit{solving} of linear systems of the form $\displaystyle{Ax=b}$ using \textit{PETSc}.
+    \end{itemize}
+    \item\textit{Uhaina}:
+    \begin{itemize}
+        \item Coded the main routines for \textit{computing integrals} and \textit{assembling} the linear system (in parallel).
+        \item \underline{Yet to do}:
+        \begin{itemize}
+            \item Construct \textit{weak} derivative and Laplace operators.
+            \item Clean up the code.
+        \end{itemize}
+    \end{itemize}
+    \item\textit{Uhaina} toy code:
+    \begin{itemize}
+        \item \underline{Yet to do}:
+        \begin{itemize}
+        \item Further test the wet/dry algorithm.
+        \item Wave generation.
+        \item Run 2D test cases.
+        \end{itemize}
+    \end{itemize}
+\end{myenum}
 \end{frame}
 %
 \subsection*{The \textit{Green-Naghdi} model}
@@ -185,6 +222,7 @@ and the nonlinear \textit{pre-balanced} flux is defined as (see \cite{pres_3}):
     \mathfrak{f}(\mathbf{w},b)\coloneqq hu^{2}+\frac{1}{2}\mathrm{g}(\eta^{2}-2\eta b).
 \end{equation}
 \end{frame}
+%
 % Discrete formulation
 \section{Discrete formulation}
 %
@@ -421,11 +459,11 @@ where, for any $\displaystyle{w_{h}\in\mathbb{P}^{k}(\altmathcal{T}_{h})}$,
 \begin{figure}[!htb]
 \begin{minipage}{\linewidth}
     \hspace*{\fill}
-    \subcaptionbox{Head-on collision.}{
-    \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T1/Hoc/21/}{1}{150}}
-    \hspace*{\fill}
     \subcaptionbox{Wall.}{
     \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T1/Wall/21/}{1}{150}}
+    \hspace*{\fill}
+    \subcaptionbox{Head-on collision.}{
+    \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T1/Hoc/21/}{1}{150}}
     \hspace*{\fill}
     \vspace{-0.5\baselineskip}
     \caption{Free-surface elevation ($\displaystyle{\zeta^{\prime}}$) distribution for the wave of $\displaystyle{\epsilon = 0.21}$.}
@@ -436,11 +474,11 @@ where, for any $\displaystyle{w_{h}\in\mathbb{P}^{k}(\altmathcal{T}_{h})}$,
 \begin{figure}[!htb]
 \begin{minipage}{\linewidth}
     \hspace*{\fill}
-    \subcaptionbox{Head-on collision.}{
-    \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T1/Hoc/96/}{1}{150}}
-    \hspace*{\fill}
     \subcaptionbox{Wall.}{
     \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T1/Wall/96/}{1}{150}}
+    \hspace*{\fill}
+    \subcaptionbox{Head-on collision.}{
+    \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T1/Hoc/96/}{1}{150}}
     \hspace*{\fill}
     \vspace{-0.5\baselineskip}
     \caption{Free-surface elevation ($\displaystyle{\zeta^{\prime}}$) distribution for the wave of $\displaystyle{\epsilon = 0.96}$.}
@@ -451,9 +489,9 @@ where, for any $\displaystyle{w_{h}\in\mathbb{P}^{k}(\altmathcal{T}_{h})}$,
 \begin{figure}[!htb]
 \begin{minipage}{\linewidth}
     \hspace*{\fill}
-    \subcaptionbox{Head-on collision.}{\includegraphics[width=0.475\linewidth]{Figures/T1/HocWall1_P3 (0.21).pdf}}
+    \subcaptionbox{$\displaystyle{\epsilon = 0.21}$.}{\includegraphics[width=0.475\linewidth]{Figures/T1/HocWall1_P3 (0.21).pdf}}
     \hspace*{\fill}
-    \subcaptionbox{Wall.}{\includegraphics[width=0.475\linewidth]{Figures/T1/HocWall1_P3 (0.96).pdf}}
+    \subcaptionbox{$\displaystyle{\epsilon = 0.96}$.}{\includegraphics[width=0.475\linewidth]{Figures/T1/HocWall1_P3 (0.96).pdf}}
     \hspace*{\fill}
     \vspace{-0.5\baselineskip}
     \caption{Free-surface elevation ($\displaystyle{\zeta^{\prime}}$) distribution at $\displaystyle{t^{\prime} = t_{0, p, f}^{\prime}}$ for waves of $\displaystyle{\epsilon = 0.21}$ and $\displaystyle{0.96}$.}
@@ -471,7 +509,7 @@ where, for any $\displaystyle{w_{h}\in\mathbb{P}^{k}(\altmathcal{T}_{h})}$,
     \subcaptionbox{Time evolution.}{\animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T2/frames/}{1}{150}}
     \hspace*{\fill}
     \vspace{-0.5\baselineskip}
-    \caption{Overtaking collision of a wave of $\displaystyle{\epsilon = 0.44}$ by one of $\displaystyle{\epsilon = 0.96}$.}
+    \caption{Overtaking collision of a wave of $\displaystyle{\epsilon = 0.44}$ by another of $\displaystyle{\epsilon = 0.96}$.}
 \end{minipage}
 \end{figure}
 \end{frame}
@@ -488,7 +526,7 @@ where, for any $\displaystyle{w_{h}\in\mathbb{P}^{k}(\altmathcal{T}_{h})}$,
     \animategraphics[width=0.475\linewidth,autoplay,loop]{30}{Figures/T3/frames/u/}{1}{150}}
     \hspace*{\fill}
     \vspace{-0.5\baselineskip}
-    \caption{Water depth ($\displaystyle{h}$) and velocity ($\displaystyle{u}$) evolution.}
+    \caption{Water depth ($\displaystyle{h}$) and velocity ($\displaystyle{u}$) time evolution.}
 \end{minipage}
 \end{figure}
 \end{frame}
@@ -578,46 +616,9 @@ where, for any $\displaystyle{w_{h}\in\mathbb{P}^{k}(\altmathcal{T}_{h})}$,
 \end{minipage}
 \end{figure}
 \end{frame}
-
-
-
-\begin{frame}[c]
-\begin{figure}[!htb]
-\begin{minipage}{\linewidth}
-    \hspace*{\fill}
-    \subcaptionbox{Gauge $\displaystyle{g_{0}}$.}{\includegraphics[width=0.475\linewidth]{}}
-    \hspace*{\fill}
-    \subcaptionbox{Gauge $\displaystyle{g_{1}}$.}{\includegraphics[width=0.475\linewidth]{}}
-    \hspace*{\fill}
-    \subcaptionbox{Gauge $\displaystyle{g_{2}}$.}{\includegraphics[width=0.475\linewidth]{}}
-    \hspace*{\fill}
-    \vspace{-0.5\baselineskip}
-    \caption{Comparison between experiments ($\displaystyle{\circ}$) and computations (\rule[0.5ex]{1em}{0.5pt}): $\displaystyle{\alpha=1}$ for the wave of $\displaystyle{\epsilon = 0.07}$.}
-\end{minipage}
-\end{figure}
-\end{frame}
-\begin{frame}[c]
-\begin{figure}[!htb]
-\begin{minipage}{\linewidth}
-    \hspace*{\fill}
-    \subcaptionbox{Gauge $\displaystyle{g_{0}}$.}{\includegraphics[width=0.475\linewidth]{}}
-    \hspace*{\fill}
-    \subcaptionbox{Gauge $\displaystyle{g_{1}}$.}{\includegraphics[width=0.475\linewidth]{}}
-    \hspace*{\fill}
-    \subcaptionbox{Gauge $\displaystyle{g_{2}}$.}{\includegraphics[width=0.475\linewidth]{}}
-    \hspace*{\fill}
-    \vspace{-0.5\baselineskip}
-    \caption{Comparison between experiments ($\displaystyle{\circ}$) and computations (\rule[0.5ex]{1em}{0.5pt}): $\displaystyle{\alpha=1}$ for the wave of $\displaystyle{\epsilon = 0.12}$.}
-\end{minipage}
-\end{figure}
-\end{frame}
-
-
-
-
 % Appendix
 \section{Appendix}
-\begin{frame}
+\begin{frame}[c]
 \href{https://github.com/FilipeFT24/PhD-presentation}{\textcolor{blue}{\faLink}}\quad Presentation repository (Github)
 
 \href{https://github.com/FilipeFT24/uhainafil-toy1d}{\textcolor{blue}{\faLink}}\quad Uhaina 1D toy code repository (GitHub)
